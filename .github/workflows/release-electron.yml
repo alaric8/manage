@@ -1,0 +1,43 @@
+name: Electron Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'  # 当打标签时触发（例如 v1.0.0）
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 使用 Ubuntu 来构建 Linux 和 macOS（通过 cross-compilation）
+
+    strategy:
+      matrix:
+        platform: [win, mac, linux]  # 构建三个平台
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # 你可以指定 Node.js 版本
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Electron app
+        run: npm run build  # 确保你有构建 Electron 应用的脚本
+
+      - name: Install electron-builder
+        run: npm install electron-builder --save-dev
+
+      - name: Build and Publish Electron app
+        run: |
+          npx electron-builder --${{ matrix.platform }} --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # 使用 GitHub Token 进行发布
