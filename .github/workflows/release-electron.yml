@@ -38,6 +38,9 @@ jobs:
         run: npm run build  # 先打包 Vue 后再打包 Electron
       - name: Build and Publish Electron app
         run: |
-          npx electron-builder --${{ matrix.platform }} --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # 使用 GitHub Token 进行发布
+          npx electron-builder --${{ matrix.platform }} 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: electron-build-artifacts  # 自定义构建产物的名称
+          path: build/**  # 上传 dist 目录下的所有文件
