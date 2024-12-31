@@ -36,10 +36,6 @@ jobs:
 
       - name: Build Electron app
         run: npm run build  # 先打包 Vue 后再打包 Electron
-
-      - name: Install electron-builder
-        run: npm install electron-builder --save-dev
-
       - name: Build and Publish Electron app
         run: |
           npx electron-builder --${{ matrix.platform }} --publish always
