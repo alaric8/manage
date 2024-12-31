@@ -22,5 +22,14 @@
     "target": "AppImage" // Linux 下的目标安装包格式
   },
   "electronVersion": "33.2.0", // 指定 Electron 版本
-  "publish": []
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "alaric8", // 你的 GitHub 用户名
+      "repo": "manage", // 你的仓库名称
+      "token": "${GH_TOKEN}", // 使用 GitHub Token，确保已经配置 GitHub Secrets
+      "releaseType": "draft", // 设置为 draft 或发布，避免覆盖
+      "prerelease": false // 如果是预发布版本，设置为 true
+    }
+  ]
 }
