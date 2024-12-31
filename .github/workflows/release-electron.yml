@@ -35,6 +35,8 @@ jobs:
         run: npm run build-only
 
       - name: Build Electron
+        env:
+         GH_TOKEN: ${{ secrets.GH_TOKEN }}  # 添加 GH_TOKEN 环境变量
         run: |
           if [ ${{ matrix.platform }} == 'win' ]; then
             npx electron-builder --win
