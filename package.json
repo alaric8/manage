@@ -8,8 +8,6 @@
     "dev:electron": "electron ./electron/main.js",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder -p always",
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force"
