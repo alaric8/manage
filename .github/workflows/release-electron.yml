@@ -18,23 +18,27 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [windows-latest, macos-latest, ubuntu-latest]
-        node-version: ['22']
+        platform: [windows-latest, macos-latest, ubuntu-latest]  # 选择不同的构建平台
+        node-version: ['22']  # Node.js 版本
 
     runs-on: ${{ matrix.platform }}
 
     steps:
+      # 1. Checkout 项目代码
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. 设置 Node.js 环境
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
+      # 3. 安装 pnpm（如果你还没有全局安装 pnpm）
       - name: Install pnpm
         run: npm install -g pnpm
 
+      # 4. 缓存 pnpm store 以加速依赖安装
       - name: Cache pnpm store
         uses: actions/cache@v3
         with:
@@ -44,19 +48,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
+      # 5. 安装项目依赖
       - name: Install dependencies
         run: pnpm install
 
+      # 6. 构建 Vue 前端
       - name: Build Vue
         run: pnpm run build-only
 
+      # 7. 构建 Electron 应用
       - name: Build Electron
-        run: npx electron-builder --dir
+        run: npx electron-builder --dir  # 使用 npx 确保使用本地安装的 electron-builder
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # 使用 GitHub token 进行发布
 
+      # 8. 上传构建产物
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 更新为 v4
         with:
           name: build-${{ matrix.platform }}
           path: build/**
