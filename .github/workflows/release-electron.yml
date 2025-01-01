@@ -67,5 +67,5 @@ jobs:
         uses: actions/upload-artifact@v4  # 更新为 v4
         with:
           name: build-${{ matrix.platform }}
-          path: build/*.exe      # 仅上传 Windows 安装包
+          path: build/*      # 仅上传 Windows 安装包
            
