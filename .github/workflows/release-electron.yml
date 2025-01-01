@@ -18,33 +18,36 @@ jobs:
   build:
     strategy:
       matrix:
-        platform:  [windows-latest, macos-latest, ubuntu-latest]
+        platform: [windows-latest, macos-latest, ubuntu-latest]
+        node-version: ['22']
 
     runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies with pnpm
+        run: pnpm install --frozen-lockfile
 
       - name: Build Vue
-        run: npm run build-only
+        run: pnpm run build-only
 
       - name: Build Electron
         run: |
-            npx electron-builder 
+          pnpm run pack
         env:
-            GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{matrix.platform}}
+          name: build-${{ matrix.platform }}
           path: build/**

@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force"
+    "type-check": "vue-tsc --build --force",
+    "pack": "electron-builder --dir"
   },
   "dependencies": {
     "@iconify/vue": "^4.2.0",
