@@ -15,9 +15,9 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [win, mac, linux]  # 定义要构建的平台
+        platform: [windows-latest]  # 定义要构建的平台
 
-    runs-on: ${{ matrix.platform == 'win' && 'windows-latest' || matrix.platform == 'mac' && 'macos-latest' || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout code
