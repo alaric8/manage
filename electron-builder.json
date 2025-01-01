@@ -7,19 +7,31 @@
   "files": [
     "dist/**",
     "electron/preload.js", // 包含构建后的前端文件
-    "electron/main.js" // 包含 Electron 主文件
+    "electron/main.js", // 包含 Electron 主文件
+    "!**/node_modules/**/*", // 排除 devDependencies
+    "!**/test/**" // 排除测试文件
   ],
   "extraMetadata": {
     "main": "electron/main.js" // 指定入口文件
   },
   "win": {
-    "target": "nsis" // Windows 下的目标安装包格式
+    "target": [
+      "nsis",
+      "zip"
+    ]
   },
   "mac": {
-    "target": "dmg" // macOS 下的目标安装包格式
+    "target": [
+      "dmg",
+      "zip"
+    ]
   },
   "linux": {
-    "target": "AppImage" // Linux 下的目标安装包格式
+    "target": [
+      "AppImage",
+      "deb", // Ubuntu/Debian
+      "rpm" // RedHat/Fedora
+    ]
   },
   "electronVersion": "33.2.0", // 指定 Electron 版本
   "publish": []

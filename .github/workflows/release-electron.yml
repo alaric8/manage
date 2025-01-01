@@ -11,11 +11,15 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write  # Grant permission to create and modify releases
+
 jobs:
   build:
     strategy:
       matrix:
-        platform: [windows-latest]  # 定义要构建的平台
+        platform: [windows-latest, macos-latest, ubuntu-latest] # 添加 macOS 和 Linux 平台
+        node-version: [22] # 可扩展支持多个 Node.js 版本
 
     runs-on: ${{ matrix.platform }}
 
@@ -26,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install
@@ -36,13 +40,12 @@ jobs:
 
       - name: Build Electron
         run: |
-            npx electron-builder 
+          npx electron-builder --${{ matrix.platform == 'windows-latest' && 'win' || matrix.platform == 'macos-latest' && 'mac' || 'linux' }}
         env:
-            GH_TOKEN: ${{ secrets.GH_TOKEN }}
-    
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: electron-build-artifacts
+          name: build-${{ matrix.platform }}
           path: build/**
