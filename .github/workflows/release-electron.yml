@@ -18,8 +18,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [windows-latest, macos-latest, ubuntu-latest] # 添加 macOS 和 Linux 平台
-        node-version: [22] # 可扩展支持多个 Node.js 版本
+        platform:  [windows-latest, macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
 
@@ -30,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
@@ -40,12 +39,12 @@ jobs:
 
       - name: Build Electron
         run: |
-          npx electron-builder --${{ matrix.platform == 'windows-latest' && 'win' || matrix.platform == 'macos-latest' && 'mac' || 'linux' }}
+            npx electron-builder 
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+            GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: build-${{ matrix.platform }}
+          name: ${{matrix.platform}}
           path: build/**
